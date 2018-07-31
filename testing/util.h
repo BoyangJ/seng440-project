@@ -7,21 +7,22 @@ int width;
 
 typedef struct rgb
 {
-    unsigned int r;
-    unsigned int g;
-    unsigned int b;
+    int r;
+     int g;
+     int b;
 } rgb;
 
 typedef struct ycc
 {
-    unsigned int y;
-    unsigned int cb;
-    unsigned int cr;
+     int y;
+     int cb;
+     int cr;
 } ycc;
 
 
 unsigned int clamp(unsigned int in, unsigned int min, unsigned int max)
 {
+	if (in < min) { printf("clamping %d lol\n", in); }
 	return in < min ? min : in > max ? max : in;
 } 
 

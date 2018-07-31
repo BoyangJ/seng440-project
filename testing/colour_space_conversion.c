@@ -18,10 +18,9 @@
 
 int main()
 {
-
     FILE *fp;
     char buf[READBUFFER];
-    fp = fopen("test2.rgb", "r");
+    fp = fopen("bits.rgb", "r");
 
     // get image width and height
     fscanf(fp, "%d", &width);
@@ -40,12 +39,19 @@ int main()
         input[i] = malloc(width * sizeof *input[i]);
         output[i] = malloc(width * sizeof *output[i]);
     }
-
     for (i = 0; i < height; ++i)
     {
         for (j = 0; j < width; ++j)
         {
-            fscanf(fp, "%f %f %f", &input[i][j].r, &input[i][j].g, &input[i][j].b);
+            // TEMPORARY SHIT
+//            unsigned int a, b, c;
+//            fscanf(fp, "%d %d %d", &a, &b, &c);
+//            input[i][j].r = a * 16;
+//            input[i][j].g = b * 16;
+//            input[i][j].b = c * 16;
+
+// ORIGINAL SHIT
+            fscanf(fp, "%d %d %d", &input[i][j].r, &input[i][j].g, &input[i][j].b);
         }
     }
 
@@ -53,12 +59,12 @@ int main()
 	//start time
     matrix_rgb_to_ycc(input, output);
 	//end time
-    fp = fopen("out.ycc", "w");
+    fp = fopen("optimized_out_1.ycc", "w");
     for (i = 0; i < height; ++i)
     {
         for (j = 0; j < width; ++j)
         {
-            fprintf(fp, "%.0f %.0f %.0f\n", output[i][j].y, output[i][j].cb, output[i][j].cr);
+            fprintf(fp, "%d %d %d\n", output[i][j].y, output[i][j].cb, output[i][j].cr);
         }
     }
     fclose(fp);
@@ -74,12 +80,12 @@ int main()
 	//start time
     matrix_ycc_to_rgb(output, original);
 	//end time
-    fp = fopen("orig.rgb", "w");
+    fp = fopen("optimized_orig_1.rgb", "w");
     for (i = 0; i < height; ++i)
     {
         for (j = 0; j < width; ++j)
         {
-            fprintf(fp, "%.0f %.0f %.0f\n", original[i][j].r, original[i][j].g, original[i][j].b);
+            fprintf(fp, "%d %d %d\n", original[i][j].r, original[i][j].g, original[i][j].b);
         }
     }
     fclose(fp);

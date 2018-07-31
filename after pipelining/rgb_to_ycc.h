@@ -75,7 +75,6 @@ void matrix_rgb_to_ycc(rgb **in, ycc **out)
 
 			// compute the average for the next iteration
             average = rgb_to_ycc_avg(in[i+2][j+2], in[i+3][j+2], in[i+2][j+3], in[i+3][j+3]);
-
         }
     }
 

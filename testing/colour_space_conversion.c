@@ -56,9 +56,16 @@ int main()
     }
 
     fclose(fp);
+
+    struct timeval start, end;
 	//start time
+    gettimeofday(&start,NULL);
     matrix_rgb_to_ycc(input, output);
 	//end time
+    gettimeofday(&end,NULL);
+    double total_t = (end.tv_sec * 1000.0 + end.tv_usec/1000.0) - (start.tv_sec * 1000.0 + start.tv_usec/1000.0);
+    printf("time for rgb -> ycc: %f\n",total_t);
+
     fp = fopen("optimized_out_1.ycc", "w");
     for (i = 0; i < height; ++i)
     {
@@ -78,8 +85,13 @@ int main()
         original[i] = malloc(width * sizeof *original[i]);
     }
 	//start time
+    gettimeofday(&start,NULL);
     matrix_ycc_to_rgb(output, original);
 	//end time
+    gettimeofday(&end,NULL);
+    total_t = (end.tv_sec * 1000.0 + end.tv_usec/1000.0) - (start.tv_sec * 1000.0 + start.tv_usec/1000.0);
+    printf("time for ycc -> rgb: %f\n",total_t);
+
     fp = fopen("optimized_orig_1.rgb", "w");
     for (i = 0; i < height; ++i)
     {

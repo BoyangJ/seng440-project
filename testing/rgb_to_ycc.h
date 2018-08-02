@@ -42,7 +42,7 @@ ycc rgb_to_ycc_avg(rgb w, rgb x, rgb y, rgb z)
     return average;
 }
 
-void matrix_rgb_to_ycc(rgb **in, ycc **out)
+void matrix_rgb_to_ycc(rgb ** in, ycc ** out)
 {
     int i, j;
 

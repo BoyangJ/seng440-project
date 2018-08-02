@@ -1152,37 +1152,42 @@ matrix_rgb_to_ycc:
 	.word	height
 	.word	width
 	.size	matrix_rgb_to_ycc, .-matrix_rgb_to_ycc
+	.global	__aeabi_i2d
+	.global	__aeabi_dmul
+	.global	__aeabi_ddiv
+	.global	__aeabi_dadd
+	.global	__aeabi_dsub
 	.align	2
 	.global	main
 	.type	main, %function
 main:
 	@ Function supports interworking.
-	@ args = 0, pretend = 0, frame = 32
+	@ args = 0, pretend = 0, frame = 48
 	@ frame_needed = 0, uses_anonymous_args = 0
 	stmfd	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, lr}
-	ldr	r1, .L103
-	sub	sp, sp, #44
-	ldr	r0, .L103+4
+	ldr	r1, .L104
+	sub	sp, sp, #60
+	ldr	r0, .L104+4
 	bl	fopen
-	ldr	fp, .L103+8
+	ldr	fp, .L104+8
 	mov	r7, r0
-	ldr	r1, .L103+12
+	ldr	r1, .L104+12
 	mov	r2, fp
 	bl	fscanf
-	ldr	r2, .L103+16
-	ldr	r1, .L103+12
+	ldr	r2, .L104+16
+	ldr	r1, .L104+12
 	mov	r0, r7
 	bl	fscanf
-	ldr	r1, .L103+16
+	ldr	r1, .L104+16
 	ldr	r0, [r1, #0]
 	mov	r0, r0, asl #2
 	bl	malloc
-	ldr	r2, .L103+16
+	ldr	r2, .L104+16
 	str	r0, [sp, #12]
 	ldr	r0, [r2, #0]
 	mov	r0, r0, asl #2
 	bl	malloc
-	ldr	r1, .L103+16
+	ldr	r1, .L104+16
 	ldr	r3, [r1, #0]
 	cmp	r3, #0
 	str	r0, [sp, #16]
@@ -1200,7 +1205,7 @@ main:
 	str	r0, [r1, r4]
 	sub	r0, r2, r3, asl #2
 	bl	malloc
-	ldr	r2, .L103+16
+	ldr	r2, .L104+16
 	ldr	r3, [r2, #0]
 	add	r5, r5, #1
 	ldr	r1, [sp, #16]
@@ -1226,7 +1231,7 @@ main:
 	add	r3, r2, #4
 	add	ip, ip, #8
 	mov	r0, r7
-	ldr	r1, .L103+20
+	ldr	r1, .L104+20
 	str	ip, [sp, #0]
 	bl	fscanf
 	ldr	r3, [fp, #0]
@@ -1235,21 +1240,81 @@ main:
 	add	r4, r4, #12
 	bgt	.L75
 .L77:
-	ldr	r1, .L103+16
+	ldr	r1, .L104+16
 	ldr	r3, [r1, #0]
 	add	r8, r8, #1
 	cmp	r3, r8
 	bgt	.L74
 .L72:
 	mov	r0, r7
+	add	sl, sp, #48
 	bl	fclose
+	mov	r1, #0
+	mov	r0, sl
+	bl	gettimeofday
 	add	r0, sp, #12
 	ldmia	r0, {r0, r1}	@ phole ldm
 	bl	matrix_rgb_to_ycc
-	ldr	r0, .L103+24
-	ldr	r1, .L103+28
+	mov	r1, #0
+	add	r0, sp, #40
+	bl	gettimeofday
+	ldr	r0, [sp, #40]
+	bl	__aeabi_i2d
+	mov	r3, #1073741824
+	add	r3, r3, #9371648
+	mov	r2, #0
+	add	r3, r3, #16384
+	bl	__aeabi_dmul
+	mov	r4, r0
+	ldr	r0, [sp, #44]
+	mov	r5, r1
+	bl	__aeabi_i2d
+	mov	r3, #1073741824
+	add	r3, r3, #9371648
+	mov	r2, #0
+	add	r3, r3, #16384
+	bl	__aeabi_ddiv
+	mov	r2, r0
+	mov	r3, r1
+	mov	r0, r4
+	mov	r1, r5
+	bl	__aeabi_dadd
+	mov	r6, r0
+	ldr	r0, [sp, #48]
+	mov	r7, r1
+	bl	__aeabi_i2d
+	mov	r3, #1073741824
+	add	r3, r3, #9371648
+	mov	r2, #0
+	add	r3, r3, #16384
+	bl	__aeabi_dmul
+	mov	r4, r0
+	ldr	r0, [sp, #52]
+	mov	r5, r1
+	bl	__aeabi_i2d
+	mov	r3, #1073741824
+	add	r3, r3, #9371648
+	mov	r2, #0
+	add	r3, r3, #16384
+	bl	__aeabi_ddiv
+	mov	r2, r0
+	mov	r3, r1
+	mov	r0, r4
+	mov	r1, r5
+	bl	__aeabi_dadd
+	mov	r2, r0
+	mov	r3, r1
+	mov	r0, r6
+	mov	r1, r7
+	bl	__aeabi_dsub
+	mov	r2, r0
+	mov	r3, r1
+	ldr	r0, .L104+24
+	bl	printf
+	ldr	r0, .L104+28
+	ldr	r1, .L104+32
 	bl	fopen
-	ldr	r2, .L103+16
+	ldr	r2, .L104+16
 	ldr	r3, [r2, #0]
 	cmp	r3, #0
 	mov	r7, r0
@@ -1270,7 +1335,7 @@ main:
 	ldr	r2, [r3, r4]
 	mov	r0, r7
 	ldr	r3, [r1, #4]
-	ldr	r1, .L103+32
+	ldr	r1, .L104+36
 	str	ip, [sp, #0]
 	bl	fprintf
 	ldr	r3, [fp, #0]
@@ -1279,7 +1344,7 @@ main:
 	add	r4, r4, #12
 	bgt	.L80
 .L82:
-	ldr	r2, .L103+16
+	ldr	r2, .L104+16
 	ldr	r3, [r2, #0]
 	add	r8, r8, #1
 	cmp	r3, r8
@@ -1287,11 +1352,11 @@ main:
 .L78:
 	mov	r0, r7
 	bl	fclose
-	ldr	r3, .L103+16
+	ldr	r3, .L104+16
 	ldr	r0, [r3, #0]
 	mov	r0, r0, asl #2
 	bl	malloc
-	ldr	r1, .L103+16
+	ldr	r1, .L104+16
 	ldr	r3, [r1, #0]
 	cmp	r3, #0
 	str	r0, [sp, #20]
@@ -1302,35 +1367,40 @@ main:
 	mov	r0, r3, asl #4
 	sub	r0, r0, r3, asl #2
 	bl	malloc
-	ldr	r2, .L103+16
-	ldr	r3, [sp, #20]
-	ldr	r2, [r2, #0]
-	str	r0, [r3, r4, asl #2]
+	ldr	r2, .L104+16
+	ldr	r1, [sp, #20]
+	ldr	r3, [r2, #0]
+	str	r0, [r1, r4, asl #2]
 	add	r4, r4, #1
-	cmp	r2, r4
-	str	r2, [sp, #36]
+	cmp	r3, r4
 	bgt	.L84
-	cmp	r2, #0
-	ble	.L83
-	ldr	r3, .L103+8
-	ldr	r3, [r3, #0]
+.L83:
+	mov	r0, sl
 	mov	r1, #0
+	bl	gettimeofday
+	ldr	r2, .L104+16
+	ldr	r2, [r2, #0]
+	cmp	r2, #0
+	str	r2, [sp, #28]
+	ble	.L85
+	ldr	r1, [fp, #0]
+	mov	r3, #0
 	mov	r9, #4080
-	str	r1, [sp, #28]
-	str	r3, [sp, #24]
-	str	r1, [sp, #32]
+	str	r3, [sp, #32]
+	str	r1, [sp, #24]
+	str	r3, [sp, #36]
 	add	r9, r9, #15
-.L85:
+.L86:
 	ldr	r3, [sp, #24]
 	cmp	r3, #0
-	ble	.L87
-	ldr	r1, [sp, #32]
+	ble	.L88
+	ldr	r1, [sp, #36]
 	add	r2, sp, #16
 	ldmia	r2, {r2, r3}	@ phole ldm
 	ldr	r8, [r2, r1]
 	ldr	r7, [r3, r1]
 	mov	sl, #0
-.L86:
+.L87:
 	ldr	r5, [r8, #8]
 	ldr	r6, [r8, #4]
 	ldr	ip, [r8], #12
@@ -1392,35 +1462,91 @@ main:
 	strhi	r9, [r7, #8]
 	cmp	sl, r2
 	add	r7, r7, #12
-	blt	.L86
-.L87:
-	ldr	r3, [sp, #28]
-	ldr	r2, [sp, #32]
-	ldr	r1, [sp, #36]
+	blt	.L87
+.L88:
+	ldr	r3, [sp, #32]
+	ldr	r2, [sp, #36]
+	ldr	r1, [sp, #28]
 	add	r3, r3, #1
 	add	r2, r2, #4
 	cmp	r3, r1
-	str	r3, [sp, #28]
-	str	r2, [sp, #32]
-	blt	.L85
-.L83:
-	ldr	r1, .L103+28
-	ldr	r0, .L103+36
+	str	r3, [sp, #32]
+	str	r2, [sp, #36]
+	blt	.L86
+.L85:
+	mov	r1, #0
+	add	r0, sp, #40
+	bl	gettimeofday
+	ldr	r0, [sp, #40]
+	bl	__aeabi_i2d
+	mov	r3, #1073741824
+	add	r3, r3, #9371648
+	mov	r2, #0
+	add	r3, r3, #16384
+	bl	__aeabi_dmul
+	mov	r4, r0
+	ldr	r0, [sp, #44]
+	mov	r5, r1
+	bl	__aeabi_i2d
+	mov	r3, #1073741824
+	add	r3, r3, #9371648
+	mov	r2, #0
+	add	r3, r3, #16384
+	bl	__aeabi_ddiv
+	mov	r2, r0
+	mov	r3, r1
+	mov	r0, r4
+	mov	r1, r5
+	bl	__aeabi_dadd
+	mov	r6, r0
+	ldr	r0, [sp, #48]
+	mov	r7, r1
+	bl	__aeabi_i2d
+	mov	r3, #1073741824
+	add	r3, r3, #9371648
+	mov	r2, #0
+	add	r3, r3, #16384
+	bl	__aeabi_dmul
+	mov	r4, r0
+	ldr	r0, [sp, #52]
+	mov	r5, r1
+	bl	__aeabi_i2d
+	mov	r3, #1073741824
+	add	r3, r3, #9371648
+	mov	r2, #0
+	add	r3, r3, #16384
+	bl	__aeabi_ddiv
+	mov	r2, r0
+	mov	r3, r1
+	mov	r0, r4
+	mov	r1, r5
+	bl	__aeabi_dadd
+	mov	r2, r0
+	mov	r3, r1
+	mov	r0, r6
+	mov	r1, r7
+	bl	__aeabi_dsub
+	mov	r3, r1
+	mov	r2, r0
+	ldr	r0, .L104+40
+	bl	printf
+	ldr	r1, .L104+32
+	ldr	r0, .L104+44
 	bl	fopen
-	ldr	r1, .L103+16
+	ldr	r1, .L104+16
 	ldr	r3, [r1, #0]
 	cmp	r3, #0
 	mov	r7, r0
 	movgt	r8, #0
-	ble	.L88
-.L89:
+	ble	.L89
+.L90:
 	ldr	r3, [fp, #0]
 	cmp	r3, #0
 	movgt	r5, #0
 	movgt	r4, r5
 	movgt	r6, r8, asl #2
-	ble	.L92
-.L90:
+	ble	.L93
+.L91:
 	ldr	r2, [sp, #20]
 	ldr	r3, [r2, r6]
 	add	r1, r3, r4
@@ -1428,30 +1554,30 @@ main:
 	ldr	r2, [r3, r4]
 	mov	r0, r7
 	ldr	r3, [r1, #4]
-	ldr	r1, .L103+32
+	ldr	r1, .L104+36
 	str	ip, [sp, #0]
 	bl	fprintf
 	ldr	r3, [fp, #0]
 	add	r5, r5, #1
 	cmp	r3, r5
 	add	r4, r4, #12
-	bgt	.L90
-.L92:
-	ldr	r1, .L103+16
+	bgt	.L91
+.L93:
+	ldr	r1, .L104+16
 	ldr	r3, [r1, #0]
 	add	r8, r8, #1
 	cmp	r3, r8
-	bgt	.L89
-.L88:
+	bgt	.L90
+.L89:
 	mov	r0, r7
 	bl	fclose
-	ldr	r2, .L103+16
+	ldr	r2, .L104+16
 	ldr	r3, [r2, #0]
 	cmp	r3, #0
-	ble	.L93
+	ble	.L94
 	mov	r5, #0
 	mov	r4, r5
-.L94:
+.L95:
 	ldr	r3, [sp, #12]
 	ldr	r0, [r3, r4]
 	bl	free
@@ -1461,25 +1587,25 @@ main:
 	ldr	r2, [sp, #20]
 	ldr	r0, [r2, r4]
 	bl	free
-	ldr	r1, .L103+16
+	ldr	r1, .L104+16
 	ldr	r3, [r1, #0]
 	add	r5, r5, #1
 	cmp	r3, r5
 	add	r4, r4, #4
-	bgt	.L94
-.L93:
+	bgt	.L95
+.L94:
 	ldr	r0, [sp, #12]
 	bl	free
 	ldr	r0, [sp, #16]
 	bl	free
 	ldr	r0, [sp, #20]
 	bl	free
-	add	sp, sp, #44
+	add	sp, sp, #60
 	ldmfd	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, lr}
 	bx	lr
-.L104:
+.L105:
 	.align	2
-.L103:
+.L104:
 	.word	.LC1
 	.word	.LC0
 	.word	width
@@ -1490,6 +1616,8 @@ main:
 	.word	.LC5
 	.word	.LC6
 	.word	.LC7
+	.word	.LC8
+	.word	.LC9
 	.size	main, .-main
 	.comm	height,4,4
 	.comm	width,4,4
@@ -1508,14 +1636,20 @@ main:
 	.ascii	"%d %d %d\000"
 	.space	3
 .LC4:
-	.ascii	"optimized_out_1.ycc\000"
+	.ascii	"time for rgb -> ycc: %f\012\000"
+	.space	3
 .LC5:
+	.ascii	"optimized_out_1.ycc\000"
+.LC6:
 	.ascii	"w\000"
 	.space	2
-.LC6:
+.LC7:
 	.ascii	"%d %d %d\012\000"
 	.space	2
-.LC7:
+.LC8:
+	.ascii	"time for ycc -> rgb: %f\012\000"
+	.space	3
+.LC9:
 	.ascii	"optimized_orig_1.rgb\000"
 	.ident	"GCC: (Sourcery G++ Lite 2008q3-72) 4.3.2"
 	.section	.note.GNU-stack,"",%progbits
